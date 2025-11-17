@@ -16,14 +16,14 @@ namespace PrimerLeague.Controllers
         }
         public async Task<IActionResult> index()
         {
-            var teams = await context.Team.ToListAsync();
+            var teams = await context.Teams.ToListAsync();
             var res = _mapper.Map<List<TeamDTO>>(teams);
             return View(res);
         }
         public async Task<IActionResult> Details(int id)
         {
-            var team = await context.Team
-                .Include(t => t.PlayerProfile)
+            var team = await context.Teams
+                .Include(t => t.PlayerProfiles).ThenInclude(c => c.Country)
                 .FirstOrDefaultAsync(t => t.TeamId == id);
             var res = _mapper.Map<TeamDTO>(team);
             return View(res);

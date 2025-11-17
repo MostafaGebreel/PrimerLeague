@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_PremirLeagueLayout.cshtml";
+
 }
 @model TeamDTO
 <!DOCTYPE html>
@@ -352,6 +353,7 @@
                 <table class="players-table">
                     <thead>
                         <tr>
+                            <th>Num</th>
                             <th>Player Name</th>
                             <th>Position</th>
                             <th>Birthday</th>
@@ -364,21 +366,58 @@
                     </thead>
                     <tbody>
                         <!-- Sample Player 1 -->
-                        <tr>
-                            <td class="player-name">Bruno Fernandes</td>
-                            <td><span class="position-badge position-mf">MF</span></td>
-                            <td>08/09/1994</td>
-                            <td>179 cm</td>
-                            <td>69 kg</td>
-                            <td>Right</td>
-                            <td class="market-value">€75M</td>
-                            <td>
-                                <div class="nationality">
-                                    <span class="flag">🇵🇹</span>
-                                    <span>Portugal</span>
-                                </div>
-                            </td>
-                        </tr>
+                        @{
+                            int counter = 1;
+                        }
+                        @foreach (var player in Model.players) {
+                                    string badgeClass;
+
+                                    switch (player.Position?.Trim().ToUpper())
+                                    {
+                                        case "CM":
+                                        case "DM":
+                                        case "AM":
+                                            badgeClass = "position-mf";
+                                            break;
+                                        case "GK":
+                                            badgeClass = "position-gk";
+                                            break;
+                                        case "ST":
+                                        case "LW":
+                                        case "RW":
+                                         case "CF":
+                                            badgeClass = "position-fw";
+                                            break;
+                                        case "CB":
+                                        case "RB":
+                                        case "LB":
+                                            badgeClass = "position-df";
+                                            break;
+                                        default:
+                                            badgeClass = "position-default";
+                                            break;
+                                    }
+                                    
+                            <tr>
+                                <td>@counter</td>
+                                <td class="player-name">@player.PlayerName</td>
+                                <td>
+                                    <span class="position-badge @badgeClass">@player.Position</span>
+
+                                </td>
+                                <td>@player.BirthDay</td>
+                                <td>@player.Height</td>
+                                <td>@player.Weight</td>
+                                <td>@player.PreferredFoot</td>
+                                <td class="market-value">€@player.MarketValue</td>
+                                <td>
+                                    <div class="nationality">
+                                        <span>@player.CountryName</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            counter++;
+                        }
                     </tbody>
                 </table>
             </div>

@@ -10,6 +10,7 @@
         public int? Weight { get; set; }
         public string PreferredFoot { get; set; }
         public int MarketValue { get; set; }
+        public string? PlayerImage { get; set; }
 
         public string CountryName { get; set; }
         public string? TeamName { get; set; }

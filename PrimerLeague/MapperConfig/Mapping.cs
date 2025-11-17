@@ -9,12 +9,8 @@ namespace PrimerLeague
         public Mapping()
         {
             CreateMap<Team, TeamDTO>()
-           .ForMember(dest => dest.players, opt => opt.MapFrom(src => src.PlayerProfile));
-
-            CreateMap<PlayerProfile, PlayerProfileDto>();
-
+           .ForMember(dest => dest.players, opt => opt.MapFrom(src => src.PlayerProfiles));
             CreateMap<TeamDTO, Team>();
-
             CreateMap<PlayerProfile, PlayerProfileDto>()
             .ForMember(dest => dest.CountryName, opt => opt.MapFrom(src => src.Country.CountryName))
             .ForMember(dest => dest.TeamName, opt => opt.MapFrom(src => src.Team != null ? src.Team.TeamName : null))

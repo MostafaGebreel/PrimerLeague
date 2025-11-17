@@ -204,7 +204,8 @@
             @foreach (var team in Model)
             {
                 <!-- Team Card 1 -->
-                <div class="team-card">
+                <a asp-action="Details"  asp-route-id="@team.TeamId" class="team-card-link">
+                <div class="team-card" onclick=>
                     <div class="card-header">
                     <div class="badge-wrapper">
                         <div class="badge-circle">
@@ -216,6 +217,7 @@
                     <h3 class="team-name">@team.TeamName</h3>
                 </div>
             </div>
+                </a>
             }
         </div>
     </div>
