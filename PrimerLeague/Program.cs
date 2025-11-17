@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using PrimerLeague.Models;
+
 namespace PrimerLeague
 {
     public class Program
@@ -8,6 +11,11 @@ namespace PrimerLeague
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<PremierLeagueContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException("Connection string  not found.")));
+            
+            builder.Services.AddAutoMapper(cfg => cfg.AddProfile<Mapping>());
 
             var app = builder.Build();
 

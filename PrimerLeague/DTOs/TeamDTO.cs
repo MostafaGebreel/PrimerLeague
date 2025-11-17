@@ -11,7 +11,7 @@ namespace PrimerLeague.DTOs
 
         public string Stadium { get; set; } 
 
-        public string City { get; set; } 
-        public List<PlayerProfile> players { get; set; }
+        public string City { get; set; }
+        public List<PlayerProfileDto> players { get; set; } = new();
     }
 }

@@ -1,0 +1,404 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premier League Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f4f4f4;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100vh;
+            background: linear-gradient(180deg, #38003c 0%, #1a0019 100%);
+            padding: 0;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 2px solid rgba(0, 255, 135, 0.2);
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .logo-subtitle {
+            color: #00ff87;
+            font-size: 0.8em;
+            letter-spacing: 1px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            margin: 5px 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 600;
+        }
+
+            .nav-link:hover {
+                color: white;
+                background: rgba(0, 255, 135, 0.1);
+                padding-left: 35px;
+            }
+
+            .nav-link.active {
+                color: white;
+                background: rgba(0, 255, 135, 0.15);
+                border-left: 4px solid #00ff87;
+            }
+
+        .nav-icon {
+            font-size: 1.3em;
+            margin-right: 15px;
+            width: 25px;
+            text-align: center;
+        }
+
+        /* Top Header */
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 260px;
+            right: 0;
+            height: 70px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+        }
+
+        .page-title {
+            font-size: 1.8em;
+            font-weight: 900;
+            color: #38003c;
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 10px 40px 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            outline: none;
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+
+            .search-input:focus {
+                border-color: #00ff87;
+                box-shadow: 0 0 10px rgba(0, 255, 135, 0.2);
+            }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 25px;
+            transition: background 0.3s ease;
+        }
+
+            .user-profile:hover {
+                background: #f4f4f4;
+            }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #38003c, #00ff87);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #38003c;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            margin-top: 70px;
+            padding: 30px;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+            .stat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-title {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .stat-icon {
+            font-size: 2em;
+            opacity: 0.3;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: 900;
+            color: #38003c;
+        }
+
+        .stat-change {
+            color: #00ff87;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        /* Content Section */
+        .content-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            font-weight: 900;
+            color: #38003c;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        /* Responsive */
+        media (max-width: 768px) {
+            .sidebar
+
+        {
+            transform: translateX(-260px);
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .top-header {
+            left: 0;
+        }
+
+        .main-content {
+            margin-left: 0;
+        }
+
+        .search-input {
+            width: 150px;
+        }
+
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">Premier League</div>
+            <div class="logo-subtitle">Dashboard</div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active">
+                    <span class="nav-icon">🏠</span>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">⚽</span>
+                    <span>Teams</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">👥</span>
+                    <span>Players</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">📊</span>
+                    <span>Statistics</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">🏆</span>
+                    <span>Matches</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">📅</span>
+                    <span>Schedule</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">📈</span>
+                    <span>Standings</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Top Header -->
+    <header class="top-header">
+        <h1 class="page-title"></h1>
+        <div class="header-actions">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search...">
+                <span class="search-icon">🔍</span>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">AD</div>
+                <span class="user-name">Admin</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Total Teams</span>
+                    <span class="stat-icon">⚽</span>
+                </div>
+                <div class="stat-value">20</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Total Players</span>
+                    <span class="stat-icon">👥</span>
+                </div>
+                <div class="stat-value">540</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Matches Played</span>
+                    <span class="stat-icon">🏆</span>
+                </div>
+                <div class="stat-value">156</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-title">Goals Scored</span>
+                    <span class="stat-icon">⚡</span>
+                </div>
+                <div class="stat-value">432</div>
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="content-section">
+           @RenderBody()
+        </div>
+    </main>
+</body>
+
+</html>

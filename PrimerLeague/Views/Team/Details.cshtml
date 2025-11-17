@@ -1,0 +1,389 @@
+﻿@{
+    Layout = "~/Views/Shared/_PremirLeagueLayout.cshtml";
+}
+@model TeamDTO
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Details</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f4f4f4;
+            padding: 30px;
+        }
+
+        .team-details-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Team Header Section */
+        .team-header {
+            background: linear-gradient(135deg, #38003c 0%, #5a0045 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 30px rgba(56, 0, 60, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .team-header::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(0, 255, 135, 0.1) 0%, transparent 70%);
+                animation: pulse 4s ease-in-out infinite;
+            }
+
+        keyframes pulse {
+            0%, 100%
+
+        {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+
+        }
+
+        .team-header-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .team-badge-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+            .team-badge-large img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+
+        .team-info {
+            flex: 1;
+            color: white;
+        }
+
+        .team-name-large {
+            font-size: 3em;
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .team-meta {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1em;
+        }
+
+        .meta-icon {
+            font-size: 1.5em;
+        }
+
+        .meta-label {
+            opacity: 0.8;
+            font-weight: 600;
+        }
+
+        .meta-value {
+            font-weight: 900;
+        }
+
+        /* Players Section */
+        .players-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #f4f4f4;
+        }
+
+        .section-title {
+            font-size: 2em;
+            font-weight: 900;
+            color: #38003c;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .player-count {
+            background: linear-gradient(135deg, #38003c, #00ff87);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .players-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+            .players-table thead {
+                background: linear-gradient(135deg, #38003c 0%, #5a0045 100%);
+                color: white;
+            }
+
+            .players-table th {
+                padding: 18px 15px;
+                text-align: left;
+                font-weight: 700;
+                text-transform: uppercase;
+                font-size: 0.85em;
+                letter-spacing: 0.5px;
+            }
+
+            .players-table tbody tr {
+                border-bottom: 1px solid #f0f0f0;
+                transition: all 0.3s ease;
+            }
+
+                .players-table tbody tr:hover {
+                    background: #f8f9fa;
+                    transform: scale(1.01);
+                    box-shadow: 0 4px 15px rgba(56, 0, 60, 0.1);
+                }
+
+            .players-table td {
+                padding: 18px 15px;
+                color: #333;
+                font-size: 0.95em;
+            }
+
+        .player-name {
+            font-weight: 700;
+            color: #38003c;
+            font-size: 1.05em;
+        }
+
+        .position-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .position-gk {
+            background: #ffd700;
+            color: #333;
+        }
+
+        .position-df {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .position-mf {
+            background: #2196F3;
+            color: white;
+        }
+
+        .position-fw {
+            background: #f44336;
+            color: white;
+        }
+
+        .market-value {
+            font-weight: 700;
+            color: #00ff87;
+            font-size: 1.05em;
+        }
+
+        .nationality {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .flag {
+            font-size: 1.3em;
+        }
+
+        /* Responsive */
+        media (max-width: 1024px) {
+            .team-header-content
+
+        {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .team-name-large {
+            font-size: 2.2em;
+        }
+
+        .team-meta {
+            justify-content: center;
+        }
+
+        }
+
+        media (max-width: 768px) {
+            body
+
+        {
+            padding: 15px;
+        }
+
+        .team-header {
+            padding: 25px;
+        }
+
+        .team-badge-large {
+            width: 100px;
+            height: 100px;
+        }
+
+        .team-name-large {
+            font-size: 1.8em;
+        }
+
+        .players-section {
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+        }
+
+        .players-table {
+            font-size: 0.85em;
+        }
+
+            .players-table th,
+            .players-table td {
+                padding: 12px 8px;
+            }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="team-details-container">
+
+        <!-- Team Header Section -->
+        <div class="team-header">
+            <div class="team-header-content">
+                <div class="team-badge-large">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg" alt="Manchester United">
+                </div>
+                <div class="team-info">
+                    <h1 class="team-name-large">@Model.TeamName</h1>
+                    <div class="team-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">🏟️</span>
+                            <span class="meta-label">Stadium:</span>
+                            <span class="meta-value">@Model.Stadium</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">📍</span>
+                            <span class="meta-label">City:</span>
+                            <span class="meta-value">@Model.City</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Players Section -->
+        <div class="players-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span>👥</span>
+                    Squad
+                </h2>
+                <span class="player-count">@Model.players.Count()</span>
+            </div>
+
+            <div class="table-container">
+                <table class="players-table">
+                    <thead>
+                        <tr>
+                            <th>Player Name</th>
+                            <th>Position</th>
+                            <th>Birthday</th>
+                            <th>Height</th>
+                            <th>Weight</th>
+                            <th>Preferred Foot</th>
+                            <th>Market Value</th>
+                            <th>Nationality</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Sample Player 1 -->
+                        <tr>
+                            <td class="player-name">Bruno Fernandes</td>
+                            <td><span class="position-badge position-mf">MF</span></td>
+                            <td>08/09/1994</td>
+                            <td>179 cm</td>
+                            <td>69 kg</td>
+                            <td>Right</td>
+                            <td class="market-value">€75M</td>
+                            <td>
+                                <div class="nationality">
+                                    <span class="flag">🇵🇹</span>
+                                    <span>Portugal</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

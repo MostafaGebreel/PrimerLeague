@@ -1,0 +1,223 @@
+﻿@{
+    Layout = "~/Views/Shared/_PremirLeagueLayout.cshtml";
+}
+
+@model List<TeamDTO>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premier League Teams</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f4f4f4;
+            padding: 30px;
+        }
+
+        .teams-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+        }
+
+            .team-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 5px;
+                background: linear-gradient(90deg, #38003c, #00ff87);
+                transform: scaleX(0);
+                transition: transform 0.4s ease;
+            }
+
+            .team-card:hover::before {
+                transform: scaleX(1);
+            }
+
+            .team-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 40px rgba(56, 0, 60, 0.2);
+            }
+
+        .card-header {
+            background: linear-gradient(135deg, #38003c 0%, #5a0045 100%);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .card-header::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(0, 255, 135, 0.1) 0%, transparent 70%);
+                animation: pulse 3s ease-in-out infinite;
+            }
+
+        keyframes pulse {
+            0%, 100%
+
+        {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+
+        50% {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        }
+
+        .badge-wrapper {
+            position: relative;
+            z-index: 2;
+            display: inline-block;
+        }
+
+        .badge-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s ease;
+        }
+
+        .team-card:hover .badge-circle {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .team-badge {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+        }
+
+        .card-body {
+            padding: 25px 20px;
+            text-align: center;
+            background: white;
+        }
+
+        .team-name {
+            font-size: 1.4em;
+            font-weight: 900;
+            color: #38003c;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            display: inline-block;
+        }
+
+            .team-name::after {
+                content: '';
+                position: absolute;
+                bottom: -8px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 0;
+                height: 3px;
+                background: linear-gradient(90deg, #38003c, #00ff87);
+                transition: width 0.4s ease;
+            }
+
+        .team-card:hover .team-name::after {
+            width: 100%;
+        }
+
+        /* Responsive */
+        media (max-width: 768px) {
+            body
+
+        {
+            padding: 15px;
+        }
+
+        .teams-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .card-header {
+            padding: 30px 20px;
+        }
+
+        .badge-circle {
+            width: 100px;
+            height: 100px;
+        }
+
+        .team-name {
+            font-size: 1.1em;
+        }
+
+        }
+
+        media (max-width: 480px) {
+            .teams-grid
+
+        {
+            grid-template-columns: 1fr;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="teams-container">
+        <div class="teams-grid">
+            @foreach (var team in Model)
+            {
+                <!-- Team Card 1 -->
+                <div class="team-card">
+                    <div class="card-header">
+                    <div class="badge-wrapper">
+                        <div class="badge-circle">
+                            <img src="https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg" alt="Manchester United" class="team-badge">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3 class="team-name">@team.TeamName</h3>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</body>
+</html>
