@@ -200,13 +200,56 @@
                 padding: 18px 15px;
                 color: #333;
                 font-size: 0.95em;
+                text-align:center;
+            }
+            .players-table th{
+                text-align:center;
             }
 
         .player-name {
             font-weight: 700;
             color: #38003c;
             font-size: 1.05em;
+            padding: 6px 4px;
         }
+
+        .player-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .player-photo,
+        .player-placeholder svg {
+            width: 38px;
+            height: 38px;
+            object-fit: cover;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Placeholder styling */
+        .ph-outer {
+            fill: #ececec;
+            stroke: #d4d4d4;
+            stroke-width: 6;
+        }
+
+        .ph-inner {
+            fill: none;
+            stroke: #e7e7e7;
+            stroke-width: 3;
+        }
+
+        .ph-head,
+        .ph-body {
+            fill: #c4c4c4;
+        }
+
+        .player-text {
+            white-space: nowrap;
+        }
+
 
         .position-badge {
             display: inline-block;
@@ -319,7 +362,7 @@
         <div class="team-header">
             <div class="team-header-content">
                 <div class="team-badge-large">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg" alt="Manchester United">
+                    <img src="@Model.TeamImage" alt="">
                 </div>
                 <div class="team-info">
                     <h1 class="team-name-large">@Model.TeamName</h1>
@@ -354,7 +397,7 @@
                     <thead>
                         <tr>
                             <th>Num</th>
-                            <th>Player Name</th>
+                            <th>Player </th>
                             <th>Position</th>
                             <th>Birthday</th>
                             <th>Height</th>
@@ -400,7 +443,28 @@
                                     
                             <tr>
                                 <td>@counter</td>
-                                <td class="player-name">@player.PlayerName</td>
+                                <td class="player-name">
+                                    <div class="player-wrapper">
+                                        @if (!string.IsNullOrEmpty(player.PlayerImage))
+                                        {
+                                            <img src="@player.PlayerImage" alt="@player.PlayerName" class="player-photo" />
+                                        }
+                                        else
+                                        {
+                                            <div class="player-placeholder">
+                                                <svg viewBox="0 0 200 200">
+                                                    <circle cx="100" cy="100" r="96" class="ph-outer" />
+                                                    <circle cx="100" cy="100" r="80" class="ph-inner" />
+                                                    <circle cx="100" cy="75" r="28" class="ph-head" />
+                                                    <path d="M50 160 Q100 115 150 160" class="ph-body" />
+                                                </svg>
+                                            </div>
+                                        }
+
+                                        <span class="player-text">@player.PlayerName</span>
+                                    </div>
+                                </td>
+
                                 <td>
                                     <span class="position-badge @badgeClass">@player.Position</span>
 
@@ -408,12 +472,28 @@
                                 <td>@player.BirthDay</td>
                                 <td>@player.Height</td>
                                 <td>@player.Weight</td>
-                                <td>@player.PreferredFoot</td>
+                                <td>
+                                     @if (player.PreferredFoot == "R")
+                                    {
+                                        <svg width="34" height="22" viewBox="0 0 34 22">
+                                            <path d="M9 3 C5 7, 5 15, 9 19 L13 19 C17 15, 17 7, 13 3 Z" fill="#b8a0c3" />
+                                            <path d="M21 3 C17 7, 17 15, 21 19 L25 19 C29 15, 29 7, 25 3 Z" fill="#2196f3" />
+                                        </svg>
+                                    }
+                                    else
+                                    {
+                                        <svg width="34" height="22" viewBox="0 0 34 22">
+                                            <path d="M9 3 C5 7, 5 15, 9 19 L13 19 C17 15, 17 7, 13 3 Z" fill="#2196f3" />
+                                            <path d="M21 3 C17 7, 17 15, 21 19 L25 19 C29 15, 29 7, 25 3 Z" fill="#b8a0c3" />
+                                        </svg>
+                                    } 
+
+                                </td>
                                 <td class="market-value">€@player.MarketValue</td>
                                 <td>
-                                    <div class="nationality">
-                                        <span>@player.CountryName</span>
-                                    </div>
+                                    @* //<div class="nationality"> *@
+                                       @player.CountryName
+                                    @* </div> *@
                                 </td>
                             </tr>
                             counter++;
